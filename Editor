@@ -1,0 +1,18 @@
+# Custom Inspector
+
+## Require:
+1. [CustomEditor(typeof(ClassName))]
+2. : Editor
+3. public override void OnInspectorGUI() { }
+
+Unity Class: 
+GUI             // Static data, Explicit position
+EditorGUI       // Dynamic data, Explicit position
+GUILayout       // Static data, Implicit position
+EditorGUILayout // Dynamic data, Implicit position
+
+## Horizontal Layout
+using ( new GUILayout.HorizontalScope() )
+{
+    // any ui here will auto layout horizontally
+}
