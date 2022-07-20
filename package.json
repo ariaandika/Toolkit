@@ -1,5 +1,5 @@
 {
-  "name": "cam.deuzo.core",
+  "name": "cam.deuzo",
   "displayName" : "Deuzo Personal Package",
   "version": "1.0.0",
   "dependencies": {
