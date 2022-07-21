@@ -18,7 +18,8 @@ namespace Toolkit
     public static class Tool
     {
 		public static bool Approx ( this float a, float b, float threshold = 0.01f ) => Mathf.Abs(a - b) <= threshold;
-		public static bool Approx ( Vector3 a, Vector3 b, float threshold = 0.01f ) => Mathf.Abs(a.sqrMagnitude - b.sqrMagnitude) <= threshold * threshold;
+		public static bool Approx ( this Vector2 a, Vector2 b, float threshold = 0.01f ) => Mathf.Abs(a.sqrMagnitude - b.sqrMagnitude) <= threshold * threshold;
+		public static bool Approx ( this Vector3 a, Vector3 b, float threshold = 0.01f ) => Mathf.Abs(a.sqrMagnitude - b.sqrMagnitude) <= threshold * threshold;
 		
 		public static float ToValue ( this bool v ) => v ? 1 : 0;
 		public static float ToValue ( this bool v, bool negativeCondition ) => v ? 1 : negativeCondition ? -1 : 0;
