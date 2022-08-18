@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+// input owng
 namespace Toolkit
 {
 	[CreateAssetMenu(fileName = "InputData",menuName = "InputData",order = 1)]
