@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Toolkit.Camera
+namespace Toolkit.CameraSystem
 {
     public class CamSidescroll : MonoBehaviour
     {

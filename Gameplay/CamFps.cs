@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolkit.Camera
+namespace Toolkit.CameraSystem
 {
     public class CamFps : MonoBehaviour
     {
@@ -12,7 +12,7 @@ namespace Toolkit.Camera
         
         [Header("Camera")]
         public float sensitivity = 4;
-        public static UnityEngine.Camera cam;
+        public static Camera cam;
         public bool invertX;
         public bool invertY;
         
@@ -57,12 +57,18 @@ namespace Toolkit.Camera
                 Interact ( TargetFunction.Func3 );
         }
 
+        /// <summary>
+        /// Cast ray from mouse position and return RaycastHit
+        /// </summary>
         public bool RawInteract (out RaycastHit hitInfo)
         {
             var ray = cam.ScreenPointToRay ( Input.mousePosition );
             return Physics.Raycast ( ray, out hitInfo, interactionDistance );
         }
 
+        /// <summary>
+        /// Cast ray from mouse position and detect ICameraInteract
+        /// </summary>
         public void Interact (TargetFunction target)
         {
             if ( !RawInteract ( out var x ) ) return;
@@ -88,5 +94,11 @@ namespace Toolkit.Camera
         Func1,
         Func2,
         Func3
+    }
+    public interface ICameraInteract
+    {
+        void OnCameraInteract();
+        void OnCameraInteract1();
+        void OnCameraInteract2();
     }
 }
