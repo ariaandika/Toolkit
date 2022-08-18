@@ -38,7 +38,7 @@ namespace Toolkit.Movement
 		void Awake ()
 		{
 			t = transform;
-			this.Fetch ( ref c );
+			c = GetComponent<CharacterController> ();
 		}
 
 		void Update ()

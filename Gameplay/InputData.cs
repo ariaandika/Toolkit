@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Toolkit
+namespace Toolkit.InputManager
 {
 	[CreateAssetMenu(fileName = "InputData",menuName = "InputData",order = 1)]
 	public class InputData : ScriptableObject

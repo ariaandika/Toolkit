@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-namespace Toolkit
+namespace Toolkit.InputManager
 {
 	public class MInput : MonoBehaviour
 	{
-		public InputData inputData;
+		// Singleton
 		public static MInput i;
+		public InputData inputData;
 
+		/// <summary>
+		/// Main action that trigger with specified key
+		/// </summary>
 		public Dictionary<string, Action> input = new Dictionary<string, Action>();
+		
 		public UnityEvent OnStartReadingKeyState;
 		public UnityEvent<KeyCode> OnStopReadingKeyState;
 		
@@ -48,7 +49,13 @@ namespace Toolkit
 					input[ inputData.keys[Array.IndexOf ( inputData.keycodes, k )] ]?.Invoke ();
 		}
 
+		/// <summary>
+		/// Manually change keycode with specified key
+		/// </summary>
 		public void SetKey (string _key, KeyCode _keyCode) => inputData.keycodes[Array.IndexOf ( inputData.keys, _key )] = _keyCode;
+		/// <summary>
+		/// Return keycode with specified key
+		/// </summary>
 		public KeyCode GetKey ( string _key ) => inputData.keycodes[Array.IndexOf ( inputData.keys, _key )];
 
 		/// <summary>
@@ -77,15 +84,4 @@ namespace Toolkit
 			readingKey = false;
 		}
 	}
-	#if UNITY_EDITOR
-	[CustomEditor(typeof(MInput))]
-	class MInputEditor : Editor
-	{
-		public override void OnInspectorGUI ()
-		{
-			EditorGUILayout.HelpBox ( new GUIContent ( "Use MInput.input[key] += method" ) );
-			base.OnInspectorGUI ();
-		}
-	}
-	#endif
 }

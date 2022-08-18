@@ -1,0 +1,16 @@
+{
+    "name": "Mesh",
+    "rootNamespace": "",
+    "references": [
+        "GUID:78bbbd302c04c3944be78cd96d4e109a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
