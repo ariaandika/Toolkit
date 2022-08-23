@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml.XPath;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Toolkit
 {
@@ -27,11 +28,10 @@ namespace Toolkit
 		{if (condition) True?.Invoke (); else False?.Invoke ();}
 		public static void DoNot ( this bool condition, Action True, Action False = default )
 		{if (!condition) True?.Invoke (); else False?.Invoke ();}
-		
 		public static void Do (this int iteration, Action<int> action, bool lequal = false ,int step = 1)
 		{for ( var i = 0; i < iteration + (lequal ? 1 : 0); i+=step ) action.Invoke ( i );}
-		public static void Do (this int iteration, Action<int,float> action)
-		{for ( var i = 0; i <= iteration; i++ ) action.Invoke ( i, (float) i / iteration );}
+		public static void Do (this int iteration, Action<int,float> action, bool lequal = true)
+		{for ( var i = 0; i < iteration + lequal.ToValue(); i++ ) action.Invoke ( i, (float) i / iteration );}
 		public static void Do<T> (this List<T> x, Action<int, T> action)
 		{for ( var i = 0; i < x.Count; i++ ) action.Invoke ( i,x[i] );}
 		public static void DoNext<T> (this List<T> x, Action<T, T> action)
@@ -54,6 +54,8 @@ namespace Toolkit
 			}
 			return numer;
 		}
+
+		public static void p ( this string x ) => Debug.Log ( x );
 	}
 
 	#endregion
@@ -178,18 +180,36 @@ namespace Toolkit
 
 	public class MeshTemp
 	{
-		readonly List<Vector3> vert  ;
-		readonly List<int> tri  ;
+		readonly List<Vector3> vert;
+		readonly List<int> tri;
+		List<Color> col;
+		
+		public int vertCount => vert.Count;
+		public int colCount => col.Count;
+		public int TriOffset => tri.Max () + 1;
 
+		public void Vert (Vector3 _vert) => vert.Add ( _vert );
+		public void Col (Color _col) => col.Add ( _col );
+		public void Vert (IEnumerable<Vector3> _vert) => _vert.DoEach ( x => vert.Add ( x ) );
+		public void Col ( IEnumerable<Color> _col ) => _col.DoEach ( x => col.Add ( x ) );
+		
+		public void Tri (IEnumerable<int> _tri, int offset = 0) => _tri.DoEach ( x => tri.Add ( x + offset ) );
+		/// <summary>
+		/// try use this at the end, so the length match
+		/// </summary>
+		public void ColSingle (Color _col) => col = _col.ToList(vertCount);
+		
 		public MeshTemp (Mesh mesh = default)
 		{
 			if ( mesh != null ) {
 				vert = mesh.vertices.ToList ();
 				tri = mesh.triangles.ToList ();
+				col = mesh.colors.ToList ();
 			}
 			else{
 				vert = new List<Vector3>();
 				tri = new List<int>();
+				col = new List<Color>();
 			}
 		}
 		
@@ -197,34 +217,32 @@ namespace Toolkit
 		{
 			_m.vertices = vert.ToArray ();
 			_m.triangles = tri.ToArray ();
+			_m.colors = col.ToArray ();
 		}
 
 		public int Merge (Mesh _m, int triOffset = 0, Vector3 _offset = default)
 		{
 			var tempVert = _m.vertices.ToList();
 			var tempTri = _m.triangles.ToList();
+			var tempCol = _m.colors.ToList ();
 			
 			var _tri = tri;
 			_tri.DoEach ( x => x + triOffset );
 			
 			var _vert = vert;
 			_vert.DoEach ( x => x + _offset );
+
+			var _col = col;
 			
-			tempVert.AddRange ( vert );
+			tempVert.AddRange ( _vert );
 			tempTri.AddRange ( _tri );
+			tempCol.AddRange( _col );
 
 			_m.vertices = tempVert.ToArray ();
 			_m.triangles = tempTri.ToArray ();
+			_m.colors = tempCol.ToArray ();
 			return tempTri.Max () + 1;
 		}
-
-		public int TriOffset => tri.Max () + 1;
-
-		public void Vert (Vector3 _vert) => vert.Add ( _vert );
-		public void Vert (IEnumerable<Vector3> _vert) => _vert.DoEach ( x => vert.Add ( x ) );
-		
-		public void Tri (int _tri) => tri.Add ( _tri );
-		public void Tri (IEnumerable<int> _tri) => _tri.DoEach ( x => tri.Add ( x ) );
 	}
 
 	#endregion

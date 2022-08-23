@@ -12,7 +12,7 @@ namespace Toolkit
 		public static Vector2 right (this float x, float y) => new Vector2(x,y);
 		public static Vector2 sp ( this float x ) => new Vector2 ( x, x);
 		
-		public static Vector3 spread ( this float x ) => new Vector3 ( x, x, x );
+		public static Vector3 v ( this float x ) => new Vector3 ( x, x, x );
 		public static Vector3 u (this float x) => new Vector3(0,x);
 		public static Vector3 u (this float y, float x) => new Vector3(x,y);
 		public static Vector3 r (this float x) => new Vector3(x,0);
@@ -63,6 +63,19 @@ namespace Toolkit
 		{
 			var o = current.Dir ( target ) * speed + current;
 			return current.Dir ( o, false ).sqrMagnitude > current.Dir ( target, false ).sqrMagnitude ? target : o;
+		}
+		/// <summary>
+		/// True if still moving, false when arrive at target
+		/// </summary>
+		public static bool MoveToward ( this Vector3 current, Vector3 target, out Vector3 result, float speed )
+		{
+			var o = current.Dir ( target ) * speed + current;
+			if ( current.Dir ( o, false ).sqrMagnitude > current.Dir ( target, false ).sqrMagnitude ){
+				result = target;
+				return false;
+			}
+			result = o;
+			return true;
 		}
 
 		// Vector direction
@@ -140,6 +153,8 @@ namespace Toolkit
 	public static class Tool
 	{
 		public static int Wrap ( this int x, int max = 1) => x % max;
+
+		public static int Wrap ( this int x, int min, int max) => (x - min) % max + min;
 		public static (int result, int fill) Wrap2 ( this int x, int max = 1)
 		{
 			var xx = 0;
